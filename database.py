@@ -239,15 +239,11 @@ def create_new_recipe():
 
     mycursor.execute("INSERT INTO recipe (name, cook_time, method) VALUES ('%s', '%s', '%s')" % (new_recipe.name, new_recipe.cook_time, new_recipe.method))
 
-    mycursor.execute("SELECT recipe_id FROM recipe ORDER BY recipe_id DESC LIMIT 1")
+    mycursor.execute("SELECT recipe_id FROM recipe WHERE name='%s'" % (new_recipe.name))
     result = mycursor.fetchone()
     for x in result:
         recipe_id = x
 
-    print(len(new_recipe.ingredients))
-    print(new_recipe.ingredients)
-    print(new_recipe.preparation)
-    print(new_recipe.quantity)
     for i in range(0, len(new_recipe.ingredients)):
         ingredient = new_recipe.ingredients[i]
         preparation = new_recipe.preparation[i]
@@ -271,24 +267,20 @@ def delete_recipe():
     while True:
         try:
             show_all_recipe_names()
-            user_input = input('Please type a recipe name to delete: ')
-            mycursor.execute("SELECT name, cook_time, method FROM recipe WHERE name IN ('%s')" % (user_input))
+            id_num = input('Please type the ID of the recipe that you want to remove: ')
+            mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe WHERE recipe.recipe_id IN ('%s')" % (id_num))
             result = mycursor.fetchall()
             if result == []:
                 raise ValueError
         except ValueError:
-            print('Please type the full recipe name! ')
+            print('Please type a valid ID #! ')
             show_all_recipe_names()
             continue
         else:
             break
-    mycursor.execute("SELECT recipe_id FROM recipe WHERE name='%s'" % (user_input))
-    result = mycursor.fetchone()
-    for x in result:
-        recipe_id = x
-    mycursor.execute("DELETE FROM instructions WHERE recipe_id='%s'" % recipe_id)
-    mycursor.execute("DELETE FROM ingredients WHERE recipe_id='%s'" % (recipe_id))
-    mycursor.execute("DELETE FROM recipe WHERE name='%s'" % (user_input))
+    mycursor.execute("DELETE FROM instructions WHERE recipe_id='%s'" % (id_num))
+    mycursor.execute("DELETE FROM ingredients WHERE recipe_id='%s'" % (id_num))
+    mycursor.execute("DELETE FROM recipe WHERE recipe_id='%s'" % (id_num))
     db.commit()
 
     menu.display_main_menu()
