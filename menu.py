@@ -5,11 +5,13 @@ def display_main_menu():
     print("1. View all recipes")
     print("2. Search for a recipe")
     print("3. Add a recipe")
-    print("4. Quit app")
+    print("4. Delete a recipe")
+    print("5. Edit an entry")
+    print("6. Quit App")
 
 
 def main_menu_input():
-    valid = ['1', '2', '3', '4']
+    valid = ['1', '2', '3', '4', '5', '6']
     while True:
         try:
             user_input = input('Choose a number: ')
@@ -58,6 +60,10 @@ def main_menu_func(user_input):
     if user_input in '3':
         database.create_new_recipe()
     if user_input in '4':
+        database.delete_recipe()
+    if user_input in '5':
+        pass
+    if user_input in '6':
         pass
 
 

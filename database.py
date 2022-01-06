@@ -10,21 +10,6 @@ db = mysql.connector.connect(
 )
 
 mycursor = db.cursor()
-'''
-Creates a database
-'''
-# mycursor.execute('CREATE DATABASE recipedb')
-'''
-Creates a table
-'''
-
-
-# mycursor.execute('CREATE TABLE Person (name VARCHAR(50), age smallint UNSIGNED, personID int PRIMARY KEY AUTO_INCREMENT)')
-# mycursor.execute('DESCRIBE Person')
-# mycursor.execute('INSERT INTO Person (name, age) VALUES (%s,%s)', ('Joe', 22))
-
-# for x in mycursor:
-#    print(x)
 
 
 def show_all_recipe_names():
@@ -188,4 +173,29 @@ def create_new_recipe():
         mycursor.execute("INSERT INTO instructions(recipe_id, instruction_num, instruction) VALUES ('%s', '%s', '%s')" % (recipe_id, instruction_num, instruction))
         instruction_num += 1
 
+    db.commit()
+
+
+def delete_recipe():
+    while True:
+        try:
+            show_all_recipe_names()
+            user_input = input('Please type a recipe name to delete: ')
+            mycursor.execute("SELECT name, cook_time, method FROM recipe WHERE name IN ('%s')" % (user_input))
+            result = mycursor.fetchall()
+            if result == []:
+                raise ValueError
+        except ValueError:
+            print('Please type the full recipe name! ')
+            show_all_recipe_names()
+            continue
+        else:
+            break
+    mycursor.execute("SELECT recipe_id FROM recipe WHERE name='%s'" % (user_input))
+    result = mycursor.fetchone()
+    for x in result:
+        recipe_id = x
+    mycursor.execute("DELETE FROM instructions WHERE recipe_id='%s'" % recipe_id)
+    mycursor.execute("DELETE FROM ingredients WHERE recipe_id='%s'" % (recipe_id))
+    mycursor.execute("DELETE FROM recipe WHERE name='%s'" % (user_input))
     db.commit()
