@@ -88,14 +88,13 @@ def search_by_ingredient():
     while True:
         try:
             id_num = input('Please type an ID #: ')
-            mycursor.execute(
-                "SELECT recipe_id, name, cook_time, method FROM recipe WHERE recipe_id IN ('%s')" % (id_num))
+            mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe WHERE recipe_id IN ('%s')" % (id_num))
             result = mycursor.fetchall()
             if result == []:
                 raise ValueError
         except ValueError:
             print('Please type a valid ID #! ')
-            mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE recipe_id in ('%s')" % (id_num))
+            mycursor.execute("SELECT recipe.recipe_id, name, cook_time, method FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE ingredients.ingredient in ('%s')" % (user_input))
             result = mycursor.fetchall()
             print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
             continue
@@ -132,13 +131,13 @@ def search_by_cook_time():
     while True:
         try:
             id_num = input('Please type an ID #: ')
-            mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe WHERE recipe_id IN ('%s')" % (id_num))
+            mycursor.execute("SELECT recipe.recipe_id, name, cook_time, method FROM recipe WHERE recipe.recipe_id IN ('%s')" % (id_num))
             result = mycursor.fetchall()
             if result == []:
                 raise ValueError
         except ValueError:
             print('Please type a valid ID #! ')
-            mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE recipe_id in ('%s')" % (id_num))
+            mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe WHERE cook_time <= ('%s')" % (user_input))
             result = mycursor.fetchall()
             print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
             continue
@@ -179,7 +178,7 @@ def search_by_method():
                 raise ValueError
         except ValueError:
             print('Please type a valid ID #! ')
-            mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE recipe_id in ('%s')" % (id_num))
+            mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe WHERE method IN ('%s')" % (user_input))
             result = mycursor.fetchall()
             print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
             continue
@@ -274,7 +273,6 @@ def delete_recipe():
                 raise ValueError
         except ValueError:
             print('Please type a valid ID #! ')
-            show_all_recipe_names()
             continue
         else:
             break
@@ -296,14 +294,13 @@ def edit_name():
     while True:
         try:
             show_all_recipe_names()
-            id_num = input('Please type the ID of the recipe that you want to edit: ')
+            id_num = input('Please type the ID of the recipe that you want to edit the name: ')
             mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe WHERE recipe.recipe_id IN ('%s')" % (id_num))
             result = mycursor.fetchall()
             if result == []:
                 raise ValueError
         except ValueError:
             print('Please type a valid ID #! ')
-            show_all_recipe_names()
             continue
         else:
             break
@@ -327,14 +324,13 @@ def edit_cook_time():
     while True:
         try:
             show_all_recipe_names()
-            id_num = input('Please type the ID of the recipe that you want to edit: ')
+            id_num = input('Please type the ID of the recipe that you want to edit the cook time: ')
             mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe WHERE recipe.recipe_id IN ('%s')" % (id_num))
             result = mycursor.fetchall()
             if result == []:
                 raise ValueError
         except ValueError:
             print('Please type a valid ID #! ')
-            show_all_recipe_names()
             continue
         else:
             break
@@ -358,14 +354,13 @@ def edit_method():
     while True:
         try:
             show_all_recipe_names()
-            id_num = input('Please type the ID of the recipe that you want to edit: ')
+            id_num = input('Please type the ID of the recipe that you want to edit the cooking method: ')
             mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe WHERE recipe.recipe_id IN ('%s')" % (id_num))
             result = mycursor.fetchall()
             if result == []:
                 raise ValueError
         except ValueError:
             print('Please type a valid ID #! ')
-            show_all_recipe_names()
             continue
         else:
             break
@@ -389,14 +384,13 @@ def edit_ingredient():
     while True:
         try:
             show_all_recipe_names()
-            id_num = input('Please type the ID of the recipe that you want to edit: ')
+            id_num = input('Please type the ID of the recipe that you want to edit ingredients: ')
             mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe WHERE recipe.recipe_id IN ('%s')" % (id_num))
             result = mycursor.fetchall()
             if result == []:
                 raise ValueError
         except ValueError:
             print('Please type a valid ID #! ')
-            show_all_recipe_names()
             continue
         else:
             break
@@ -438,14 +432,13 @@ def add_ingredient():
     while True:
         try:
             show_all_recipe_names()
-            id_num = input('Please type the ID of the recipe that you want to edit: ')
+            id_num = input('Please type the ID of the recipe that you want to add an ingredient to: ')
             mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe WHERE recipe.recipe_id IN ('%s')" % (id_num))
             result = mycursor.fetchall()
             if result == []:
                 raise ValueError
         except ValueError:
             print('Please type a valid ID #! ')
-            show_all_recipe_names()
             continue
         else:
             break
@@ -472,14 +465,13 @@ def remove_ingredient():
     while True:
         try:
             show_all_recipe_names()
-            id_num = input('Please type the ID of the recipe that you want to edit: ')
+            id_num = input('Please type the ID of the recipe that you want to remove an ingredient from: ')
             mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe WHERE recipe.recipe_id IN ('%s')" % (id_num))
             result = mycursor.fetchall()
             if result == []:
                 raise ValueError
         except ValueError:
             print('Please type a valid ID #! ')
-            show_all_recipe_names()
             continue
         else:
             break
@@ -514,14 +506,13 @@ def edit_instruction():
     while True:
         try:
             show_all_recipe_names()
-            id_num = input('Please type the ID of the recipe that you want to edit: ')
+            id_num = input('Please type the ID of the recipe that you want to edit instructions: ')
             mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe WHERE recipe.recipe_id IN ('%s')" % (id_num))
             result = mycursor.fetchall()
             if result == []:
                 raise ValueError
         except ValueError:
             print('Please type a valid ID #! ')
-            show_all_recipe_names()
             continue
         else:
             break
@@ -557,14 +548,13 @@ def add_instruction():
     while True:
         try:
             show_all_recipe_names()
-            id_num = input('Please type the ID of the recipe that you want to edit: ')
+            id_num = input('Please type the ID of the recipe that you want to add an instruction to: ')
             mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe WHERE recipe.recipe_id IN ('%s')" % (id_num))
             result = mycursor.fetchall()
             if result == []:
                 raise ValueError
         except ValueError:
             print('Please type a valid ID #! ')
-            show_all_recipe_names()
             continue
         else:
             break
@@ -598,14 +588,13 @@ def remove_instruction():
     while True:
         try:
             show_all_recipe_names()
-            id_num = input('Please type the ID of the recipe that you want to edit: ')
+            id_num = input('Please type the ID of the recipe that you want to remove an instruction: ')
             mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe WHERE recipe.recipe_id IN ('%s')" % (id_num))
             result = mycursor.fetchall()
             if result == []:
                 raise ValueError
         except ValueError:
             print('Please type the full recipe name! ')
-            show_all_recipe_names()
             continue
         else:
             break
