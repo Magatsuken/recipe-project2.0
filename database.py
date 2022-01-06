@@ -414,7 +414,7 @@ def remove_ingredient():
 
     while True:
         try:
-            removed_ingredient = input('Please type an ingredient: ')
+            removed_ingredient = input('Please type an ingredient to remove: ')
             mycursor.execute("SELECT name, cook_time, method FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE ingredient in ('%s')" % (removed_ingredient))
             result = mycursor.fetchall()
             if result == []:
@@ -425,4 +425,132 @@ def remove_ingredient():
         else:
             break
     mycursor.execute("DELETE FROM ingredients WHERE ingredient='%s' AND recipe_id='%s'" % (removed_ingredient, recipe_id))
+    db.commit()
+
+
+def edit_instruction():
+    while True:
+        try:
+            show_all_recipe_names()
+            user_input = input('Please type a recipe that you want to edit: ')
+            mycursor.execute("SELECT name, cook_time, method FROM recipe WHERE name IN ('%s')" % (user_input))
+            result = mycursor.fetchall()
+            if result == []:
+                raise ValueError
+        except ValueError:
+            print('Please type the full recipe name! ')
+            show_all_recipe_names()
+            continue
+        else:
+            break
+    print(tabulate(result, headers=['Name', 'Cook Time', 'Method'], tablefmt='psql'))
+    mycursor.execute("SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE name in ('%s')" % (user_input))
+    result = mycursor.fetchall()
+    print(tabulate(result, headers=['Ingredient', 'Preparation', 'Quantity'], tablefmt='psql'))
+    mycursor.execute("SELECT instruction_num, instruction FROM recipe INNER JOIN instructions ON recipe.recipe_id = instructions.recipe_id WHERE name in ('%s')" % (user_input))
+    result = mycursor.fetchall()
+    print(tabulate(result, headers=['Step #', 'Instruction'], tablefmt='psql'))
+
+    mycursor.execute("SELECT recipe_id FROM recipe WHERE name='%s'" % (user_input))
+    result = mycursor.fetchone()
+    for x in result:
+        recipe_id = x
+
+    while True:
+        try:
+            step_num = input('Please type a step number: ')
+            mycursor.execute("SELECT instruction FROM instructions WHERE instruction_num in ('%s') AND recipe_id in ('%s')" % (step_num, recipe_id))
+            result = mycursor.fetchall()
+            if result == []:
+                raise ValueError
+        except ValueError:
+            print('Please choose a valid step! ')
+            continue
+        else:
+            break
+    new_instruction = input('What is the new instruction? ')
+    mycursor.execute("UPDATE instructions SET instruction = '%s' WHERE instruction_num IN ('%s')" % (new_instruction, step_num))
+    db.commit()
+
+
+def add_instruction():
+    while True:
+        try:
+            show_all_recipe_names()
+            user_input = input('Please type a recipe that you want to edit: ')
+            mycursor.execute("SELECT name, cook_time, method FROM recipe WHERE name IN ('%s')" % (user_input))
+            result = mycursor.fetchall()
+            if result == []:
+                raise ValueError
+        except ValueError:
+            print('Please type the full recipe name! ')
+            show_all_recipe_names()
+            continue
+        else:
+            break
+    print(tabulate(result, headers=['Name', 'Cook Time', 'Method'], tablefmt='psql'))
+    mycursor.execute("SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE name in ('%s')" % (user_input))
+    result = mycursor.fetchall()
+    print(tabulate(result, headers=['Ingredient', 'Preparation', 'Quantity'], tablefmt='psql'))
+    mycursor.execute("SELECT instruction_num, instruction FROM recipe INNER JOIN instructions ON recipe.recipe_id = instructions.recipe_id WHERE name in ('%s')" % (user_input))
+    result = mycursor.fetchall()
+    print(tabulate(result, headers=['Step #', 'Instruction'], tablefmt='psql'))
+
+    new_instruction = input('What is the new instruction? ')
+
+    mycursor.execute("SELECT recipe_id FROM recipe WHERE name='%s'" % (user_input))
+    result = mycursor.fetchone()
+    for x in result:
+        recipe_id = x
+
+    mycursor.execute("SELECT instruction_num FROM instructions WHERE recipe_id='%s' ORDER BY recipe_id DESC LIMIT 1" % (recipe_id))
+    result = mycursor.fetchone()
+    for x in result:
+        new_step = int(x)
+
+    new_step += 1
+    mycursor.execute("INSERT INTO instructions(recipe_id, instruction_num, instruction) VALUES ('%s', '%s', '%s')" % (recipe_id, new_step, new_instruction))
+    db.commit()
+
+def remove_instruction():
+    while True:
+        try:
+            show_all_recipe_names()
+            user_input = input('Please type a recipe that you want to edit: ')
+            mycursor.execute("SELECT name, cook_time, method FROM recipe WHERE name IN ('%s')" % (user_input))
+            result = mycursor.fetchall()
+            if result == []:
+                raise ValueError
+        except ValueError:
+            print('Please type the full recipe name! ')
+            show_all_recipe_names()
+            continue
+        else:
+            break
+    print(tabulate(result, headers=['Name', 'Cook Time', 'Method'], tablefmt='psql'))
+    mycursor.execute("SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE name in ('%s')" % (user_input))
+    result = mycursor.fetchall()
+    print(tabulate(result, headers=['Ingredient', 'Preparation', 'Quantity'], tablefmt='psql'))
+    mycursor.execute("SELECT instruction_num, instruction FROM recipe INNER JOIN instructions ON recipe.recipe_id = instructions.recipe_id WHERE name in ('%s')" % (user_input))
+    result = mycursor.fetchall()
+    print(tabulate(result, headers=['Step #', 'Instruction'], tablefmt='psql'))
+
+    mycursor.execute("SELECT recipe_id FROM recipe WHERE name='%s'" % (user_input))
+    result = mycursor.fetchone()
+    for x in result:
+        recipe_id = x
+
+    while True:
+        try:
+            step_num = input('Please type a step number to remove: ')
+            mycursor.execute("SELECT instruction FROM instructions WHERE instruction_num in ('%s') AND recipe_id in ('%s')" % (step_num, recipe_id))
+            result = mycursor.fetchall()
+            if result == []:
+                raise ValueError
+        except ValueError:
+            print('Please choose a valid step! ')
+            continue
+        else:
+            break
+    mycursor.execute("DELETE FROM instructions WHERE instruction_num='%s' AND recipe_id='%s'" % (step_num, recipe_id))
     db.commit()

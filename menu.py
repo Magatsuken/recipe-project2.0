@@ -87,10 +87,11 @@ def display_edit_menu():
     print("3. Edit method")
     print("4. Edit ingredient")
     print("5. Edit instruction")
+    print("6. Back to previous menu")
 
 
 def edit_menu_input():
-    valid = ['1', '2', '3', '4', '5']
+    valid = ['1', '2', '3', '4', '5', '6']
     while True:
         try:
             user_input = input('Choose a number: ')
@@ -116,7 +117,11 @@ def edit_menu_func(user_input):
         display_edit_ingredient_menu()
         edit_ingredient_menu_input()
     if user_input in '5':
-        pass
+        display_edit_instruction_menu()
+        edit_instruction_menu_input()
+    if user_input in '6':
+        display_main_menu()
+        main_menu_input()
 
 
 def display_edit_ingredient_menu():
@@ -148,3 +153,34 @@ def edit_ingredient_menu_func(user_input):
         database.add_ingredient()
     if user_input == '3':
         database.remove_ingredient()
+
+
+def display_edit_instruction_menu():
+    print("1. Edit a current entry")
+    print("2. Add an instruction to an entry")
+    print("3. Remove an instruction from an entry")
+
+
+def edit_instruction_menu_input():
+    valid = ['1', '2', '3']
+    while True:
+        try:
+            user_input = input('Choose a number: ')
+            if user_input not in valid:
+                raise ValueError
+        except ValueError:
+            print('Please enter a valid value.\n')
+            display_edit_instruction_menu()
+            continue
+        else:
+            break
+    edit_instruction_menu_func(user_input)
+
+
+def edit_instruction_menu_func(user_input):
+    if user_input == '1':
+        database.edit_instruction()
+    if user_input == '2':
+        database.add_instruction()
+    if user_input == '3':
+        database.remove_instruction()
