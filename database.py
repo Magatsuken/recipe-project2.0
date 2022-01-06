@@ -1,6 +1,7 @@
 from tabulate import tabulate
 import mysql.connector
 from recipe import Recipe
+import menu
 
 db = mysql.connector.connect(
     host='localhost',
@@ -198,4 +199,41 @@ def delete_recipe():
     mycursor.execute("DELETE FROM instructions WHERE recipe_id='%s'" % recipe_id)
     mycursor.execute("DELETE FROM ingredients WHERE recipe_id='%s'" % (recipe_id))
     mycursor.execute("DELETE FROM recipe WHERE name='%s'" % (user_input))
+    db.commit()
+
+
+def edit_entry():
+    menu.display_edit_menu()
+    menu.edit_menu_input()
+
+
+def edit_name():
+    while True:
+        try:
+            show_all_recipe_names()
+            user_input = input('Please type a recipe that you want to edit: ')
+            mycursor.execute("SELECT name, cook_time, method FROM recipe WHERE name IN ('%s')" % (user_input))
+            result = mycursor.fetchall()
+            if result == []:
+                raise ValueError
+        except ValueError:
+            print('Please type the full recipe name! ')
+            show_all_recipe_names()
+            continue
+        else:
+            break
+    print(tabulate(result, headers=['Name', 'Cook Time', 'Method'], tablefmt='psql'))
+    mycursor.execute(
+        "SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE name in ('%s')" % (
+            user_input))
+    result = mycursor.fetchall()
+    print(tabulate(result, headers=['Ingredient', 'Preparation', 'Quantity'], tablefmt='psql'))
+    mycursor.execute(
+        "SELECT instruction_num, instruction FROM recipe INNER JOIN instructions ON recipe.recipe_id = instructions.recipe_id WHERE name in ('%s')" % (
+            user_input))
+    result = mycursor.fetchall()
+    print(tabulate(result, headers=['Step #', 'Instruction'], tablefmt='psql'))
+
+    new_name = input('What do you want the new name to be? ')
+    mycursor.execute("UPDATE recipe SET name = '%s' WHERE name IN ('%s')" % (new_name, user_input))
     db.commit()
