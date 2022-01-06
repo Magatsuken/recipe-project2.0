@@ -86,13 +86,11 @@ def display_edit_menu():
     print("2. Edit cook time")
     print("3. Edit method")
     print("4. Edit ingredient")
-    print("5. Edit preparation")
-    print("6. Edit quantity")
-    print("7. Edit instruction")
+    print("5. Edit instruction")
 
 
 def edit_menu_input():
-    valid = ['1', '2', '3', '4', '5', '6', '7']
+    valid = ['1', '2', '3', '4', '5']
     while True:
         try:
             user_input = input('Choose a number: ')
@@ -113,12 +111,8 @@ def edit_menu_func(user_input):
     if user_input in '2':
         database.edit_cook_time()
     if user_input in '3':
-        pass
+        database.edit_method()
     if user_input in '4':
-        pass
+        database.edit_ingredient()
     if user_input in '5':
-        pass
-    if user_input in '6':
-        pass
-    if user_input in '7':
         pass
