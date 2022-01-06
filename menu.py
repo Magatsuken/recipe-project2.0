@@ -111,7 +111,7 @@ def edit_menu_func(user_input):
     if user_input in '1':
         database.edit_name()
     if user_input in '2':
-        pass
+        database.edit_cook_time()
     if user_input in '3':
         pass
     if user_input in '4':
