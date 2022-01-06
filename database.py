@@ -505,12 +505,17 @@ def add_instruction():
 
     mycursor.execute("SELECT instruction_num FROM instructions WHERE recipe_id='%s' ORDER BY recipe_id DESC LIMIT 1" % (recipe_id))
     result = mycursor.fetchone()
-    for x in result:
-        new_step = int(x)
+    print(result)
+    if result == None:
+        new_step = 0
+    else:
+        for x in result:
+            new_step = int(x)
 
     new_step += 1
     mycursor.execute("INSERT INTO instructions(recipe_id, instruction_num, instruction) VALUES ('%s', '%s', '%s')" % (recipe_id, new_step, new_instruction))
     db.commit()
+
 
 def remove_instruction():
     while True:
