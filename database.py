@@ -1,5 +1,6 @@
 from tabulate import tabulate
 import mysql.connector
+from recipe import Recipe
 
 db = mysql.connector.connect(
     host='localhost',
@@ -129,3 +130,62 @@ def search_by_method():
             break
     print(tabulate(result, headers=['Name', 'Cook Time', 'Method'], tablefmt='psql'))
     search_by_name()
+
+
+def create_new_recipe():
+    global recipe_id
+    recipe_name = input('What is the recipe name? ')
+    recipe_cook_time = input('What is the cook time in hours? ')
+    recipe_method = input('What is the cooking method? ')
+
+    recipe_ingredient = ''
+    step_counter = 1
+    ingredient_list = []
+    ingredient_prep = []
+    quantity_list = []
+    while recipe_ingredient != 'done':
+        recipe_ingredient = input('What is ingredient #%s? Type "done" if done. ' % (step_counter))
+        ingredient_list.append(recipe_ingredient)
+        if recipe_ingredient != 'done':
+            recipe_prep = input('How do you prepare this? Do not input anything if no prep needed. ')
+            ingredient_prep.append(recipe_prep)
+            quantity = input('How many ingredients do you use? IE 6 slices, 2 breasts. ')
+            quantity_list.append(quantity)
+        step_counter += 1
+    ingredient_list.pop()
+    ingredient_prep.pop()
+    quantity_list.pop()
+
+    recipe_instruction = ''
+    step_counter = 1
+    instruction_list = []
+    while recipe_instruction != 'done':
+        recipe_instruction = input('What is step #%s? Type "done" if done. ' % (step_counter))
+        instruction_list.append(recipe_instruction)
+        step_counter += 1
+    instruction_list.pop()
+
+    new_recipe = Recipe(recipe_name, recipe_cook_time, recipe_method, ingredient_list, ingredient_prep, quantity_list, instruction_list)
+    print(new_recipe)
+
+    mycursor.execute("INSERT INTO recipe (name, cook_time, method) VALUES ('%s', '%s', '%s')" % (new_recipe.name, new_recipe.cook_time, new_recipe.method))
+
+    for ingredient in new_recipe.ingredients:
+        for preparation in new_recipe.preparation:
+            for quantity in new_recipe.quantity:
+                mycursor.execute("SELECT recipe_id FROM recipe ORDER BY recipe_id DESC LIMIT 1")
+                result = mycursor.fetchone()
+                for x in result:
+                    recipe_id = x
+                    mycursor.execute("INSERT INTO ingredients(recipe_id, ingredient, preparation, quantity) VALUES ('%s', '%s', '%s', '%s')" % (recipe_id, ingredient, preparation, quantity))
+
+    instruction_num = 1
+    for instruction in instruction_list:
+        mycursor.execute("SELECT recipe_id FROM recipe ORDER BY recipe_id DESC LIMIT 1")
+        result = mycursor.fetchone()
+        for x in result:
+            recipe_id = x
+        mycursor.execute("INSERT INTO instructions(recipe_id, instruction_num, instruction) VALUES ('%s', '%s', '%s')" % (recipe_id, instruction_num, instruction))
+        instruction_num += 1
+
+    db.commit()
