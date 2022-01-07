@@ -1,7 +1,9 @@
 import database
+import os
 
 
 def display_main_menu():
+    os.system('cls')
     print("1. View all recipes")
     print("2. Search for a recipe")
     print("3. Add a recipe")
@@ -18,6 +20,7 @@ def main_menu_input():
             if user_input not in valid:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please enter a valid value.\n')
             display_main_menu()
             continue
@@ -27,6 +30,7 @@ def main_menu_input():
 
 
 def display_search_menu():
+    os.system('cls')
     print("1. Search by name")
     print("2. Search by ingredients")
     print("3. Search by cook time")
@@ -42,6 +46,7 @@ def search_menu_input():
             if user_input not in valid:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please enter a valid value.\n')
             display_search_menu()
             continue
@@ -82,6 +87,7 @@ def search_menu_func(user_input):
 
 
 def display_edit_menu():
+    os.system('cls')
     print("1. Edit name")
     print("2. Edit cook time")
     print("3. Edit method")
@@ -98,6 +104,7 @@ def edit_menu_input():
             if user_input not in valid:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please enter a valid value.\n')
             display_edit_menu()
             continue
@@ -125,6 +132,7 @@ def edit_menu_func(user_input):
 
 
 def display_edit_ingredient_menu():
+    os.system('cls')
     print("1. Edit a current entry")
     print("2. Add an ingredient to an entry")
     print("3. Remove an ingredient from an entry")
@@ -138,6 +146,7 @@ def edit_ingredient_menu_input():
             if user_input not in valid:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please enter a valid value.\n')
             display_edit_ingredient_menu()
             continue
@@ -156,6 +165,7 @@ def edit_ingredient_menu_func(user_input):
 
 
 def display_edit_instruction_menu():
+    os.system('cls')
     print("1. Edit a current entry")
     print("2. Add an instruction to an entry")
     print("3. Remove an instruction from an entry")
@@ -169,6 +179,7 @@ def edit_instruction_menu_input():
             if user_input not in valid:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please enter a valid value.\n')
             display_edit_instruction_menu()
             continue

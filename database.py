@@ -2,6 +2,7 @@ from tabulate import tabulate
 import mysql.connector
 from recipe import Recipe
 import menu
+import os
 
 db = mysql.connector.connect(
     host='localhost',
@@ -28,11 +29,13 @@ def select_recipe():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please type a valid ID #! ')
             show_all_recipe_names()
             continue
         else:
             break
+    os.system('cls')
     print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
     mycursor.execute("SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE recipe.recipe_id in ('%s')" % (user_input))
     result = mycursor.fetchall()
@@ -41,11 +44,14 @@ def select_recipe():
     result = mycursor.fetchall()
     print(tabulate(result, headers=['Step #', 'Instruction'], tablefmt='psql'))
 
+    input('Press ENTER to continue.')
+
     menu.display_main_menu()
     menu.main_menu_input()
 
 
 def search_by_name():
+    os.system('cls')
     while True:
         try:
             user_input = input('Please type a recipe name: ')
@@ -54,11 +60,13 @@ def search_by_name():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please type the full recipe name! ')
             show_all_recipe_names()
             continue
         else:
             break
+    os.system('cls')
     print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
     mycursor.execute("SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE name in ('%s')" % (user_input))
     result = mycursor.fetchall()
@@ -67,11 +75,14 @@ def search_by_name():
     result = mycursor.fetchall()
     print(tabulate(result, headers=['Step #', 'Instruction'], tablefmt='psql'))
 
+    input('Press ENTER to continue.')
+
     menu.display_main_menu()
     menu.main_menu_input()
 
 
 def search_by_ingredient():
+    os.system('cls')
     while True:
         try:
             user_input = input('Please type an ingredient: ')
@@ -80,10 +91,12 @@ def search_by_ingredient():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please choose another ingredient! ')
             continue
         else:
             break
+    os.system('cls')
     print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
     while True:
         try:
@@ -93,6 +106,7 @@ def search_by_ingredient():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please type a valid ID #! ')
             mycursor.execute("SELECT recipe.recipe_id, name, cook_time, method FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE ingredients.ingredient in ('%s')" % (user_input))
             result = mycursor.fetchall()
@@ -100,6 +114,7 @@ def search_by_ingredient():
             continue
         else:
             break
+    os.system('cls')
     print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
     mycursor.execute("SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE recipe.recipe_id in ('%s')" % (id_num))
     result = mycursor.fetchall()
@@ -108,11 +123,14 @@ def search_by_ingredient():
     result = mycursor.fetchall()
     print(tabulate(result, headers=['Step #', 'Instruction'], tablefmt='psql'))
 
+    input('Press ENTER to continue.')
+
     menu.display_main_menu()
     menu.main_menu_input()
 
 
 def search_by_cook_time():
+    os.system('cls')
     while True:
         try:
             user_input = float(input('Please type how much time in hours: '))
@@ -123,10 +141,12 @@ def search_by_cook_time():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please try another cook time! ')
             continue
         else:
             break
+    os.system('cls')
     print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
     while True:
         try:
@@ -136,6 +156,7 @@ def search_by_cook_time():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please type a valid ID #! ')
             mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe WHERE cook_time <= ('%s')" % (user_input))
             result = mycursor.fetchall()
@@ -143,6 +164,7 @@ def search_by_cook_time():
             continue
         else:
             break
+    os.system('cls')
     print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
     mycursor.execute("SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE recipe.recipe_id in ('%s')" % (id_num))
     result = mycursor.fetchall()
@@ -151,11 +173,14 @@ def search_by_cook_time():
     result = mycursor.fetchall()
     print(tabulate(result, headers=['Step #', 'Instruction'], tablefmt='psql'))
 
+    input('Press ENTER to continue.')
+
     menu.display_main_menu()
     menu.main_menu_input()
 
 
 def search_by_method():
+    os.system('cls')
     while True:
         try:
             user_input = input('Please type a cooking method: ')
@@ -164,10 +189,12 @@ def search_by_method():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please try another cooking method! ')
             continue
         else:
             break
+    os.system('cls')
     print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
     while True:
         try:
@@ -177,6 +204,7 @@ def search_by_method():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please type a valid ID #! ')
             mycursor.execute("SELECT recipe_id, name, cook_time, method FROM recipe WHERE method IN ('%s')" % (user_input))
             result = mycursor.fetchall()
@@ -184,6 +212,7 @@ def search_by_method():
             continue
         else:
             break
+    os.system('cls')
     print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
     mycursor.execute("SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE recipe.recipe_id in ('%s')" % (id_num))
     result = mycursor.fetchall()
@@ -192,16 +221,20 @@ def search_by_method():
     result = mycursor.fetchall()
     print(tabulate(result, headers=['Step #', 'Instruction'], tablefmt='psql'))
 
+    input('Press ENTER to continue.')
+
     menu.display_main_menu()
     menu.main_menu_input()
 
 
 def create_new_recipe():
+    os.system('cls')
     global recipe_id
     recipe_name = input('What is the recipe name? ')
     recipe_cook_time = input('What is the cook time in hours? ')
     recipe_method = input('What is the cooking method? ')
 
+    os.system('cls')
     recipe_ingredient = ''
     step_counter = 1
     ingredient_list = []
@@ -224,6 +257,7 @@ def create_new_recipe():
         step_counter += 1
     ingredient_list.pop()
 
+    os.system('cls')
     recipe_instruction = ''
     step_counter = 1
     instruction_list = []
@@ -232,6 +266,7 @@ def create_new_recipe():
         instruction_list.append(recipe_instruction)
         step_counter += 1
     instruction_list.pop()
+    os.system('cls')
 
     new_recipe = Recipe(recipe_name, recipe_cook_time, recipe_method, ingredient_list, ingredient_prep, quantity_list, instruction_list)
     print(new_recipe)
@@ -258,11 +293,14 @@ def create_new_recipe():
 
     db.commit()
 
+    input('Press ENTER to continue.')
+
     menu.display_main_menu()
     menu.main_menu_input()
 
 
 def delete_recipe():
+    os.system('cls')
     while True:
         try:
             show_all_recipe_names()
@@ -272,15 +310,18 @@ def delete_recipe():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please type a valid ID #! ')
             continue
         else:
             break
+    os.system('cls')
     mycursor.execute("DELETE FROM instructions WHERE recipe_id='%s'" % (id_num))
     mycursor.execute("DELETE FROM ingredients WHERE recipe_id='%s'" % (id_num))
     mycursor.execute("DELETE FROM recipe WHERE recipe_id='%s'" % (id_num))
     db.commit()
 
+    input('Press ENTER to continue.')
     menu.display_main_menu()
     menu.main_menu_input()
 
@@ -291,6 +332,7 @@ def edit_entry():
 
 
 def edit_name():
+    os.system('cls')
     while True:
         try:
             show_all_recipe_names()
@@ -300,10 +342,12 @@ def edit_name():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please type a valid ID #! ')
             continue
         else:
             break
+    os.system('cls')
     print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
     mycursor.execute("SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE recipe.recipe_id in ('%s')" % (id_num))
     result = mycursor.fetchall()
@@ -315,12 +359,15 @@ def edit_name():
     new_name = input('What do you want the new name to be? ')
     mycursor.execute("UPDATE recipe SET name = '%s' WHERE recipe.recipe_id IN ('%s')" % (new_name, id_num))
     db.commit()
+    os.system('cls')
 
+    input('Press ENTER to continue.')
     menu.display_main_menu()
     menu.main_menu_input()
 
 
 def edit_cook_time():
+    os.system('cls')
     while True:
         try:
             show_all_recipe_names()
@@ -330,10 +377,12 @@ def edit_cook_time():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please type a valid ID #! ')
             continue
         else:
             break
+    os.system('cls')
     print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
     mycursor.execute("SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE recipe.recipe_id in ('%s')" % (id_num))
     result = mycursor.fetchall()
@@ -345,12 +394,15 @@ def edit_cook_time():
     new_cook_time = input('What do you want the new cook time to be in hours? ')
     mycursor.execute("UPDATE recipe SET cook_time = '%s' WHERE recipe.recipe_id IN ('%s')" % (new_cook_time, id_num))
     db.commit()
+    os.system('cls')
 
+    input('Press ENTER to continue.')
     menu.display_main_menu()
     menu.main_menu_input()
 
 
 def edit_method():
+    os.system('cls')
     while True:
         try:
             show_all_recipe_names()
@@ -360,10 +412,12 @@ def edit_method():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please type a valid ID #! ')
             continue
         else:
             break
+    os.system('cls')
     print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
     mycursor.execute("SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE recipe.recipe_id in ('%s')" % (id_num))
     result = mycursor.fetchall()
@@ -375,12 +429,15 @@ def edit_method():
     new_method = input('What do you want the new method to be? ')
     mycursor.execute("UPDATE recipe SET method = '%s' WHERE recipe.recipe_id IN ('%s')" % (new_method, id_num))
     db.commit()
+    os.system('cls')
 
+    input('Press ENTER to continue.')
     menu.display_main_menu()
     menu.main_menu_input()
 
 
 def edit_ingredient():
+    os.system('cls')
     while True:
         try:
             show_all_recipe_names()
@@ -390,10 +447,12 @@ def edit_ingredient():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please type a valid ID #! ')
             continue
         else:
             break
+    os.system('cls')
     print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
     mycursor.execute("SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE recipe.recipe_id in ('%s')" % (id_num))
     result = mycursor.fetchall()
@@ -410,10 +469,12 @@ def edit_ingredient():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please choose another ingredient! ')
             continue
         else:
             break
+    os.system('cls')
     new_ingredient = input('What is the new ingredient? ')
     mycursor.execute("UPDATE ingredients SET ingredient = '%s' WHERE ingredient IN ('%s')" % (new_ingredient, old_ingredient))
     db.commit()
@@ -423,12 +484,15 @@ def edit_ingredient():
     new_quantity = input('How many ingredients do you use? IE 6 slices, 2 breasts. ')
     mycursor.execute("UPDATE ingredients SET quantity = '%s' WHERE ingredient IN ('%s')" % (new_quantity, new_ingredient))
     db.commit()
+    os.system('cls')
 
+    input('Press ENTER to continue.')
     menu.display_main_menu()
     menu.main_menu_input()
 
 
 def add_ingredient():
+    os.system('cls')
     while True:
         try:
             show_all_recipe_names()
@@ -438,10 +502,12 @@ def add_ingredient():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please type a valid ID #! ')
             continue
         else:
             break
+    os.system('cls')
     print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
     mycursor.execute("SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE recipe.recipe_id in ('%s')" % (id_num))
     result = mycursor.fetchall()
@@ -456,12 +522,15 @@ def add_ingredient():
 
     mycursor.execute("INSERT INTO ingredients(recipe_id, ingredient, preparation, quantity) VALUES ('%s', '%s', '%s', '%s')" % (id_num, new_ingredient, new_preparation, new_quantity))
     db.commit()
+    os.system('cls')
 
+    input('Press ENTER to continue.')
     menu.display_main_menu()
     menu.main_menu_input()
 
 
 def remove_ingredient():
+    os.system('cls')
     while True:
         try:
             show_all_recipe_names()
@@ -471,10 +540,12 @@ def remove_ingredient():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please type a valid ID #! ')
             continue
         else:
             break
+    os.system('cls')
     print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
     mycursor.execute("SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE recipe.recipe_id in ('%s')" % (id_num))
     result = mycursor.fetchall()
@@ -491,18 +562,22 @@ def remove_ingredient():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please choose another ingredient! ')
             continue
         else:
             break
+    os.system('cls')
     mycursor.execute("DELETE FROM ingredients WHERE ingredient='%s' AND recipe_id='%s'" % (removed_ingredient, id_num))
     db.commit()
 
+    input('Press ENTER to continue.')
     menu.display_main_menu()
     menu.main_menu_input()
 
 
 def edit_instruction():
+    os.system('cls')
     while True:
         try:
             show_all_recipe_names()
@@ -512,10 +587,12 @@ def edit_instruction():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please type a valid ID #! ')
             continue
         else:
             break
+    os.system('cls')
     print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
     mycursor.execute("SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE recipe.recipe_id in ('%s')" % (id_num))
     result = mycursor.fetchall()
@@ -532,19 +609,23 @@ def edit_instruction():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please choose a valid step! ')
             continue
         else:
             break
+    os.system('cls')
     new_instruction = input('What is the new instruction? ')
     mycursor.execute("UPDATE instructions SET instruction = '%s' WHERE instruction_num IN ('%s') AND recipe_id in ('%s')" % (new_instruction, step_num, id_num))
     db.commit()
 
+    input('Press ENTER to continue.')
     menu.display_main_menu()
     menu.main_menu_input()
 
 
 def add_instruction():
+    os.system('cls')
     while True:
         try:
             show_all_recipe_names()
@@ -554,10 +635,12 @@ def add_instruction():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please type a valid ID #! ')
             continue
         else:
             break
+    os.system('cls')
     print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
     mycursor.execute("SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE recipe.recipe_id in ('%s')" % (id_num))
     result = mycursor.fetchall()
@@ -567,6 +650,7 @@ def add_instruction():
     print(tabulate(result, headers=['Step #', 'Instruction'], tablefmt='psql'))
 
     new_instruction = input('What is the new instruction? ')
+    os.system('cls')
 
     mycursor.execute("SELECT instruction_num FROM instructions WHERE recipe_id='%s' ORDER BY instruction_num DESC LIMIT 1" % (id_num))
     result = mycursor.fetchone()
@@ -580,11 +664,13 @@ def add_instruction():
     mycursor.execute("INSERT INTO instructions(recipe_id, instruction_num, instruction) VALUES ('%s', '%s', '%s')" % (id_num, new_step, new_instruction))
     db.commit()
 
+    input('Press ENTER to continue.')
     menu.display_main_menu()
     menu.main_menu_input()
 
 
 def remove_instruction():
+    os.system('cls')
     while True:
         try:
             show_all_recipe_names()
@@ -594,10 +680,12 @@ def remove_instruction():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please type the full recipe name! ')
             continue
         else:
             break
+    os.system('cls')
     print(tabulate(result, headers=['ID', 'Name', 'Cook Time', 'Method'], tablefmt='psql'))
     mycursor.execute("SELECT ingredient, preparation, quantity FROM recipe INNER JOIN ingredients ON recipe.recipe_id = ingredients.recipe_id WHERE recipe.recipe_id in ('%s')" % (id_num))
     result = mycursor.fetchall()
@@ -614,12 +702,15 @@ def remove_instruction():
             if result == []:
                 raise ValueError
         except ValueError:
+            os.system('cls')
             print('Please choose a valid step! ')
             continue
         else:
             break
+    os.system('cls')
     mycursor.execute("DELETE FROM instructions WHERE instruction_num='%s' AND recipe_id='%s'" % (step_num, id_num))
     db.commit()
 
+    input('Press ENTER to continue.')
     menu.display_main_menu()
     menu.main_menu_input()
